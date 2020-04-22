@@ -191,7 +191,8 @@ if __name__ == '__main__':
     OBJECTIVE = kerastuner.Objective("val_f1_mean", direction="max")
     # OBJECTIVE = 'val_accuracy'
     MAX_TRIALS = 25
-    EPOCHS = 2500
+    EPOCHS = 2000
+    FIT_EPOCHS = 10000
     BATCH_SIZE = 1024
     CUR_PATH = os.getcwd()
     DATETIME = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -279,7 +280,7 @@ if __name__ == '__main__':
     best_models = tuner.get_best_models()
     best_model = best_models[0]
 
-    history = best_model.fit(x_train, [y_dloc_train, y_ED_train, y_overload_train], batch_size=BATCH_SIZE, epochs=EPOCHS,
+    history = best_model.fit(x_train, [y_dloc_train, y_ED_train, y_overload_train], batch_size=BATCH_SIZE, epochs=FIT_EPOCHS,
                              validation_data=(x_valid, [y_dloc_valid, y_ED_valid, y_overload_valid]), callbacks=FIT_CALLBACKS, verbose=2)
     print(best_model.evaluate(x_test, [y_dloc_test, y_ED_test, y_overload_test]))
 
@@ -291,7 +292,7 @@ if __name__ == '__main__':
     y_ed_pred = np.argmax(y_pred[1], axis=1)
     y_overload_pred = np.argmax(y_pred[2], axis=1)
 
-    pred_csv = 'multi_%s_pred.csv' % model_type
+    pred_csv = 'multi_pred.csv'
     if not os.path.exists(pred_csv):
         pred_df = test_df[['dloc', 'ED', 'overload_loc']].copy()
     else:
