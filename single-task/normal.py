@@ -112,6 +112,7 @@ if __name__ == '__main__':
     # OBJECTIVE = 'val_accuracy'
     MAX_TRIALS = 25
     EPOCHS = 10000
+    FIT_EPOCHS = 50000
     BATCH_SIZE = 1024
     CUR_PATH = os.getcwd()
     DATETIME = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -120,7 +121,8 @@ if __name__ == '__main__':
     if not os.path.exists(KERAS_TUNER_DIR):
         os.makedirs(KERAS_TUNER_DIR)
     KERAS_TUNER_DIR = os.path.join(KERAS_TUNER_DIR, '%s_keras_tuner_dir' % model_type)
-    os.makedirs(KERAS_TUNER_DIR)
+    if not os.path.exists(KERAS_TUNER_DIR):
+        os.makedirs(KERAS_TUNER_DIR)
 
     BEST_F1_MODEL_DIR = os.path.join(CUR_PATH, 'models')
     if not os.path.exists(BEST_F1_MODEL_DIR):
@@ -196,7 +198,7 @@ if __name__ == '__main__':
     best_models = tuner.get_best_models()
     best_model = best_models[0]
 
-    history = best_model.fit(x_train, y_train, class_weight=cw, batch_size=BATCH_SIZE, epochs=EPOCHS, validation_data=(x_valid, y_valid), callbacks=FIT_CALLBACKS, verbose=2)
+    history = best_model.fit(x_train, y_train, class_weight=cw, batch_size=BATCH_SIZE, epochs=FIT_EPOCHS, validation_data=(x_valid, y_valid), callbacks=FIT_CALLBACKS, verbose=2)
     print(best_model.evaluate(x_test, y_test))
 
     # 恢复到最佳权重
