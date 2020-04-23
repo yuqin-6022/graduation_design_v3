@@ -191,8 +191,8 @@ if __name__ == '__main__':
     OBJECTIVE = kerastuner.Objective("val_f1_mean", direction="max")
     # OBJECTIVE = 'val_accuracy'
     MAX_TRIALS = 25
-    EPOCHS = 2000
-    FIT_EPOCHS = 10000
+    EPOCHS = 2500
+    FIT_EPOCHS = 50000
     BATCH_SIZE = 1024
     CUR_PATH = os.getcwd()
     DATETIME = datetime.now().strftime('%Y%m%d%H%M%S')

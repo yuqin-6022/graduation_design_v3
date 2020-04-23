@@ -73,7 +73,7 @@ if __name__ == '__main__':
     CUR_PATH = os.getcwd()
     DATETIME = datetime.now().strftime('%Y%m%d%H%M%S')
 
-    EPOCHS = 100000
+    EPOCHS = 50000
     BATCH_SIZE = 1024
     LEARNING_RATE = 0.01
 
