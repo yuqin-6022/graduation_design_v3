@@ -93,12 +93,10 @@ class MyHyperModel(HyperModel):
             expert_fc_out = inputs
             for j in range(hp.Int('experts%d_fc' % i, min_value=1, max_value=2, step=1)):
                 expert_fc_out = tf.keras.layers.Dense(units=hp.Int('units%d' % j, min_value=64, max_value=256, step=64),
-                                                      name=('expert%d_dense%d' % (i, j)))(expert_fc_out)
+                                                      activation='relu', name=('expert%d_dense%d' % (i, j)))(expert_fc_out)
                 expert_fc_out = tf.keras.layers.BatchNormalization(name=('expert%d_dense%d_bn' % (i, j)))(expert_fc_out)  # bn
-                expert_fc_out = tf.keras.layers.Activation('relu')(expert_fc_out)  # 'activation'
-            expert_fc_out = tf.keras.layers.Dense(units=expert_out_units, name=('expert%d_same_dense' % i))(expert_fc_out)  # 统一输出units数
+            expert_fc_out = tf.keras.layers.Dense(units=expert_out_units, activation='relu', name=('expert%d_same_dense' % i))(expert_fc_out)  # 统一输出units数
             expert_fc_out = tf.keras.layers.BatchNormalization(name=('expert%d_same_dense_bn' % i))(expert_fc_out)  # bn
-            expert_fc_out = tf.keras.layers.Activation('relu')(expert_fc_out)  # 'activation'
             experts_out.append(expert_fc_out)  # 将多个expert的输出拼接
         experts_out = tf.concat(experts_out, 1)
         experts_out = tf.reshape(experts_out, (-1, experts_num, expert_out_units))
@@ -109,9 +107,8 @@ class MyHyperModel(HyperModel):
         dloc_tower_out = tower_input[:, 0]
         for i in range(hp.Int('dloc_tower_fc', min_value=1, max_value=2, step=1)):
             dloc_tower_out = tf.keras.layers.Dense(units=hp.Int('units%d' % i, min_value=64, max_value=256, step=64),
-                                                   name=('dloc_tower_dense%d' % i))(dloc_tower_out)
+                                                   activation='relu', name=('dloc_tower_dense%d' % i))(dloc_tower_out)
             dloc_tower_out = tf.keras.layers.BatchNormalization(name=('dloc_tower_dense%d_bn' % i))(dloc_tower_out)  # bn
-            dloc_tower_out = tf.keras.layers.Activation('relu')(dloc_tower_out)  # 'activation'
             dloc_tower_out = tf.keras.layers.Dropout(
                 rate=hp.Float('dloc_dropout_rate%d' % i, min_value=0, max_value=0.5, step=0.05), name=('dloc_tower_dense%d_dropout' % i))(
                 dloc_tower_out)  # dropout
@@ -121,9 +118,8 @@ class MyHyperModel(HyperModel):
         ed_tower_out = tower_input[:, 1]
         for i in range(hp.Int('ed_tower_fc', min_value=1, max_value=2, step=1)):
             ed_tower_out = tf.keras.layers.Dense(units=hp.Int('units%d' % i, min_value=64, max_value=256, step=64),
-                                                 name=('ed_tower_dense%d' % i))(ed_tower_out)
+                                                 activation='relu', name=('ed_tower_dense%d' % i))(ed_tower_out)
             ed_tower_out = tf.keras.layers.BatchNormalization(name=('ed_tower_dense%d_bn' % i))(ed_tower_out)  # bn
-            ed_tower_out = tf.keras.layers.Activation('relu')(ed_tower_out)  # 'activation'
             ed_tower_out = tf.keras.layers.Dropout(
                 rate=hp.Float('ed_dropout_rate%d' % i, min_value=0, max_value=0.5, step=0.05), name=('ed_tower_dense%d_dropout' % i))(ed_tower_out)  # dropout
         ed_tower_out = tf.keras.layers.Dense(units=10, name='ed_tower_output_dense')(ed_tower_out)
@@ -132,9 +128,8 @@ class MyHyperModel(HyperModel):
         overload_tower_out = tower_input[:, 2]
         for i in range(hp.Int('ed_tower_fc', min_value=1, max_value=2, step=1)):
             overload_tower_out = tf.keras.layers.Dense(units=hp.Int('units%d' % i, min_value=64, max_value=256, step=64),
-                                                       name=('overload_tower_dense%d' % i))(overload_tower_out)
+                                                       activation='relu', name=('overload_tower_dense%d' % i))(overload_tower_out)
             overload_tower_out = tf.keras.layers.BatchNormalization(name=('overload_tower_dense%d_bn' % i))(overload_tower_out)  # bn
-            overload_tower_out = tf.keras.layers.Activation('relu')(overload_tower_out)  # 'activation'
             overload_tower_out = tf.keras.layers.Dropout(
                 rate=hp.Float('overload_dropout_rate%d' % i, min_value=0, max_value=0.5, step=0.05), name=('overload_tower_dense%d_dropout' % i))(
                 overload_tower_out)  # dropout
